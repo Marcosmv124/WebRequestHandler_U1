@@ -29,6 +29,7 @@ class WebRequestHandler(BaseHTTPRequestHandler):
 
         # Crear la respuesta HTML dinámica
         return f"""
+        <h1>Unidad 1<h1>
         <h1>Proyecto: {path} Autor: {autor}</h1>
         <p> URL Parse Result : {self.url()} </p>
         <p> Path Original: {self.path} </p>
