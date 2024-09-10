@@ -16,13 +16,21 @@ class WebRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(self.get_response().encode("utf-8"))
 
     def get_response(self):
+        path = self.url().path.strip('/')
+        query_params = self.query_data()
+
+        autor = query_params.get('Autor','Desconocido')
+            # Crear la respuesta HTML dinámica
         return f"""
-    <h1> Hola Web </h1>
-    <p> URL Parse Result : {self.url()}         </p>
-    <p> Path Original: {self.path}         </p>
-    <p> Headers: {self.headers}      </p>
-    <p> Query: {self.query_data()}   </p>
-"""
+        <h1>Proyecto: {path} Autor: {autor}</h1>
+        """
+       #return f"""
+    #<h1> Hola Web </h1>
+    #<p> URL Parse Result : {self.url()}         </p> 
+    #<p> Path Original: {self.path}         </p>
+    #<p> Headers: {self.headers}      </p>
+   # <p> Query: {self.query_data()}   </p>
+#"""
 
 
 if __name__ == "__main__":
