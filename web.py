@@ -8,36 +8,46 @@ class WebRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.url().path
         if path == '/':
+            # Servir home.html para la ruta principal
             self.send_response(200)
             self.send_header("Content-Type", "text/html")
             self.end_headers()
             response_content = self.get_home_content()
             self.wfile.write(response_content.encode("utf-8"))
         else:
-            self.send_error_page()
-
+            # Para otras rutas, generar contenido dinámico basado en los parámetros
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()
+            response_content = self.get_dynamic_content()
+            self.wfile.write(response_content.encode("utf-8"))
+#home page
     def get_home_content(self):
         try:
             with open('home.html', 'r') as file:
                 return file.read()
         except FileNotFoundError:
-            # Si no se puede encontrar home.html, retorna una página de error
             return "404 Not Found"
 
-    def send_error_page(self):
-        self.send_response(404)
-        self.send_header("Content-Type", "text/html")
-        self.end_headers()
-        
-        try:
-            with open('404.html', 'r') as file:
-                content = file.read()
-            self.wfile.write(content.encode("utf-8"))
-        except FileNotFoundError:
-            # En caso de que el archivo 404.html también falte
-            self.wfile.write(b"<h1>404 Not Found</h1>")
+    def get_dynamic_content(self):
+        # Extraer la query string
+        query_params = dict(parse_qsl(self.url().query))
+
+        # Obtener el valor del parámetro 'autor', si existe
+        autor = query_params.get('autor', 'Desconocido')
+
+        # Crear la respuesta HTML dinámica
+        return f"""
+<h1> Hola Web </h1>
+<p> URL Parse Result : {self.url()} </p> 
+<p> Path Original: {self.path} </p>
+<p> Headers: {self.headers} </p>
+<p> Query: {self.url().query} </p>
+<p> Autor: {autor} </p>
+"""
 
 if __name__ == "__main__":
     print("Starting server")
     server = HTTPServer(("0.0.0.0", 8000), WebRequestHandler)
-    server.serve_forever()s
+    server.serve_forever()
+    
