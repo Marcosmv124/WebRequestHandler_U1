@@ -30,6 +30,10 @@ class WebRequestHandler(BaseHTTPRequestHandler):
         # Crear la respuesta HTML dinámica
         return f"""
         <h1>Proyecto: {path} Autor: {autor}</h1>
+        <p> URL Parse Result : {self.url()} </p>
+        <p> Path Original: {self.path} </p>
+        <p> Headers: {self.headers} </p>
+        <p> Query: {query_params} </p>
         """
        #return f"""
     #<h1> Hola Web </h1>
@@ -42,5 +46,5 @@ class WebRequestHandler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     print("Starting server")
-    server = HTTPServer(("localhost", 8000), WebRequestHandler)
+    server = HTTPServer(("0.0.0.0", 8000), WebRequestHandler)
     server.serve_forever()
